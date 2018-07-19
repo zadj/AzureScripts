@@ -69,10 +69,9 @@ Process {
 
 Function DebugOutput {
    Write-Host ("[Environment]::UserName  {0}" -f [Environment]::UserName)
-   Write-Host ("$env:username  {0}" -f $env:username)
-   Write-Host ("whoami  {0}" -f whoami)
+   Write-Host ("$ env:username  {0}" -f $env:username)
    Write-Host ("[System.Security.Principal.WindowsIdentity]::GetCurrent().Name  {0}" -f [System.Security.Principal.WindowsIdentity]::GetCurrent().Name)
-   Write-Host ("$(Get-WMIObject -class Win32_ComputerSystem | select username).username  {0}" -f $(Get-WMIObject -class Win32_ComputerSystem | select username).username)
+   Write-Host ("$ (Get-WMIObject -class Win32_ComputerSystem | select username).username  {0}" -f $(Get-WMIObject -class Win32_ComputerSystem | select username).username)
 
 }
 
