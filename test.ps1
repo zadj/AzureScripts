@@ -10,7 +10,11 @@ New-LocalUser `
    -Password $password `
    -PasswordNeverExpire
 
-
+# add to logon as service local policy
+GrantServiceLogon -username  ("{0}\{1}" -f $env:USERDOMAIN, "svc1")
+ 
+# set clr to sql
+Invoke-Sqlcmd -Query "EXEC sp_configure 'show advanced option', '1'; RECONFIGURE; EXEC sp_configure 'clr strict security', '1';RECONFIGURE; EXEC sp_configure; "
 
 
 # Declare Functions
