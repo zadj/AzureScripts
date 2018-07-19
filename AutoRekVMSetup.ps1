@@ -13,10 +13,10 @@ New-LocalUser `
    -PasswordNeverExpire
 
 # add to logon as service local policy
-GrantServiceLogon -username  ("{0}\{1}" -f $env:USERDOMAIN, "svc1")
+GrantServiceLogon -username  ("{0}\{1}" -f $env:COMPUTERNAME, "svc1")
  
 # set clr to sql
-Invoke-Sqlcmd -Query "EXEC sp_configure 'show advanced option', '1'; RECONFIGURE; EXEC sp_configure 'clr strict security', '1';RECONFIGURE; EXEC sp_configure; "
+Invoke-Sqlcmd -Query "EXEC sp_configure 'show advanced option', '1'; RECONFIGURE; EXEC sp_configure 'clr strict security', '1';RECONFIGURE; EXEC sp_configure; " -Username "sa" -Password "Password@123"
 
 # Configure IIS
 Import-Module Servermanager 
@@ -31,7 +31,7 @@ Install-WindowsFeature Web-Windows-Auth, Web-Net-Ext45, Web-Asp-Net45, NET-WCF-H
 Function GrantServiceLogon {
 [cmdletbinding()]
 Param (
-  [string] $username = ("{0}\{1}" -f $env:USERDOMAIN, $env:USERNAME)
+  [string] $username = ("{0}\{1}" -f $env:COMPUTERNAME, $env:USERNAME)
    ) 
 # End of Parameters
 Process {
