@@ -1,13 +1,11 @@
-# setup 
-
-Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-Install-Module Pscx -Scope CurrentUser -AllowClobber
+# The Main function which is executed once all functions are declared.
+#   -  All steps should go here
+Function Main 
+{
+DebugOutput
 
 # create user
-
-$password = ConvertTo-SecureString "password"  -AsPlainText -Force
-
-
+$password = ConvertTo-SecureString "Password@123"  -AsPlainText -Force
 New-LocalUser `
    -AccountNeverExpires `
    -Name "svc1" `
@@ -20,16 +18,16 @@ GrantServiceLogon -username  ("{0}\{1}" -f $env:USERDOMAIN, "svc1")
 # set clr to sql
 Invoke-Sqlcmd -Query "EXEC sp_configure 'show advanced option', '1'; RECONFIGURE; EXEC sp_configure 'clr strict security', '1';RECONFIGURE; EXEC sp_configure; "
 
-
+# Configure IIS
 Import-Module Servermanager 
 Get-WindowsFeature -Name *Http*
 Install-WindowsFeature Web-Windows-Auth, Web-Net-Ext45, Web-Asp-Net45, NET-WCF-HTTP-Activation45, NET-Framework-45-ASPNET
 
+}
+# End of Main function
 
 
-
-# Declare Functions
-
+# Declare additional functions
 Function GrantServiceLogon {
 [cmdletbinding()]
 Param (
@@ -68,3 +66,17 @@ Process {
   }
 }
 }
+
+Function DebugOutput {
+   Write-Host ("[Environment]::UserName  {0}" -f [Environment]::UserName)
+   Write-Host ("$env:username  {0}" -f $env:username)
+   Write-Host ("whoami  {0}" -f whoami)
+   Write-Host ("[System.Security.Principal.WindowsIdentity]::GetCurrent().Name  {0}" -f [System.Security.Principal.WindowsIdentity]::GetCurrent().Name)
+   Write-Host ("$(Get-WMIObject -class Win32_ComputerSystem | select username).username  {0}" -f $(Get-WMIObject -class Win32_ComputerSystem | select username).username)
+
+}
+
+# Execute the Main function
+Main
+# Done
+
