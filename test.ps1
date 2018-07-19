@@ -1,7 +1,7 @@
 
 # create user
 
-$password = ConvertTo-SecureString "password"  -AsPlainText -Force
+$password = ConvertTo-SecureString "Password@123"  -AsPlainText -Force
 
 
 New-LocalUser `
